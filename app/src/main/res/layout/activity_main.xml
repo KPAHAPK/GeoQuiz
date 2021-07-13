@@ -20,10 +20,12 @@
         android:orientation="horizontal">
 
         <Button
+            android:id="@+id/true_button"
             style="@style/MyButton"
             android:text="@string/true_button"/>
 
         <Button
+            android:id="@+id/false_button"
             style="@style/MyButton"
             android:text="@string/false_button"/>
 

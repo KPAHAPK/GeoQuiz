@@ -1,24 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".MainActivity"
-    android:gravity="center">
+    xmlns:tools="http://schemas.android.com/tools">
+
 
     <TextView
         android:id="@+id/question_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:layout_gravity="center_horizontal"
         tools:text="@string/question_australia"
         android:padding="24dp" />
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_gravity="center_horizontal|center_vertical">
 
         <Button
             android:id="@+id/true_button"
@@ -37,6 +36,12 @@
         android:id="@+id/next_button"
         style="@style/MyButton"
         android:src="@drawable/ic_baseline_arrow_forward_ios_24"
-        android:text="Next->" />
+        android:layout_gravity="bottom|right" />
 
-</LinearLayout>
+    <ImageButton
+        android:id="@+id/back_button"
+        style="@style/MyButton"
+        android:src="@drawable/ic_baseline_arrow_back_ios_24"
+        android:layout_gravity="bottom|left" />
+
+</FrameLayout>

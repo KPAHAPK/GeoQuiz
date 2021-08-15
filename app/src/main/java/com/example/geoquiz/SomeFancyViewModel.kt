@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 
 private const val TAG = "QuizViewModel"
 
-class QuizViewModel : ViewModel() {
+class SomeFancyViewModel : ViewModel() {
 
     private val questionBank = listOf(
         Question(R.string.question_australia, true),
@@ -14,6 +14,12 @@ class QuizViewModel : ViewModel() {
         Question(R.string.question_americas, true),
         Question(R.string.question_asia, true)
     )
+
+    fun setCurrentIndex1(index: Int) {
+        if (index != currentIndex){
+            currentIndex = index
+        }
+    }
 
     var currentIndex = 0
 

@@ -1,16 +1,19 @@
 package com.example.geoquiz
 
 import android.os.Bundle
+import android.util.Log
 import android.view.Gravity
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
+import java.lang.Exception
 
 
 private const val TAG = "MainActivity"
+private const val KEY_INDEX = "index"
 
 class MainActivity : AppCompatActivity() {
 
@@ -21,13 +24,16 @@ class MainActivity : AppCompatActivity() {
     private var counter = 0
     private var rightAnswer = 0
 
-    private val quizViewModel: QuizViewModel by lazy {
-        ViewModelProviders.of(this).get(QuizViewModel::class.java)
+    private val someFancyViewModel: SomeFancyViewModel by lazy {
+        ViewModelProvider(this).get(SomeFancyViewModel::class.java)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        val currentIndex = savedInstanceState?.getInt(KEY_INDEX, 0) ?: 0
+        someFancyViewModel.currentIndex = currentIndex
 
         trueButton = findViewById(R.id.true_button)
         falseButton = findViewById(R.id.false_button)
@@ -47,7 +53,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         nextButton.setOnClickListener {
-            quizViewModel.moveToNext()
+            someFancyViewModel.moveToNext()
             updateQuestion()
         }
         updateQuestion()
@@ -62,7 +68,7 @@ class MainActivity : AppCompatActivity() {
     private fun updateQuestion() {
         val points: Float = (rightAnswer / (counter + 1) * 100).toFloat()
         Toast.makeText(this, "Score: $points%", Toast.LENGTH_SHORT).show()
-        val questionTextResId = quizViewModel.currentQuestionText
+        val questionTextResId = someFancyViewModel.currentQuestionText
         questionTextView.setText(questionTextResId)
         trueButton.isEnabled = true
         falseButton.isEnabled = true
@@ -71,12 +77,18 @@ class MainActivity : AppCompatActivity() {
 
     private fun checkAnswer(userAnswer: Boolean) {
         counter++
-        val correctAnswer = quizViewModel.currentQuestionAnswer
+        val correctAnswer = someFancyViewModel.currentQuestionAnswer
         if (userAnswer == correctAnswer) {
             toastAnswer(R.string.correct_toast)
             rightAnswer++
         } else {
             toastAnswer(R.string.incorrect_toast)
         }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        Log.i(TAG, "onSaveInstanceState")
+        outState.putInt(KEY_INDEX, someFancyViewModel.currentIndex)
     }
 }

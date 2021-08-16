@@ -4,7 +4,10 @@ import androidx.lifecycle.ViewModel
 
 private const val TAG = "QuizViewModel"
 
-class SomeFancyViewModel : ViewModel() {
+class QuizViewModel : ViewModel() {
+
+    var currentIndex = 0
+    var isCheater = false
 
     private val questionBank = listOf(
         Question(R.string.question_australia, true),
@@ -20,8 +23,6 @@ class SomeFancyViewModel : ViewModel() {
             currentIndex = index
         }
     }
-
-    var currentIndex = 0
 
     val currentQuestionAnswer: Boolean
         get() = questionBank[currentIndex].answer

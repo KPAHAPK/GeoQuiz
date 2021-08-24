@@ -11,12 +11,12 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import org.w3c.dom.Text
 
 
 private const val TAG = "MainActivity"
 private const val KEY_INDEX = "index"
 private const val REQUEST_CODE_CHEAT = 0
-
 private const val EXTRA_ANSWER_SHOWN = "com.bignerdranch.android.geoquiz.answer_shown"
 
 
@@ -27,8 +27,12 @@ class MainActivity : AppCompatActivity() {
     private lateinit var nextButton: ImageButton
     private lateinit var questionTextView: TextView
     private lateinit var cheatButton: Button
+    private lateinit var cheatingCounterTextView: TextView
     private var counter = 0
     private var rightAnswer = 0
+    private val maxCheating = 3
+    private var cheatingCounter = 0
+
 
     private val quizViewModel: QuizViewModel by lazy {
         ViewModelProvider(this).get(QuizViewModel::class.java)
@@ -46,7 +50,9 @@ class MainActivity : AppCompatActivity() {
         nextButton = findViewById(R.id.next_button)
         questionTextView = findViewById(R.id.question_text_view)
         cheatButton = findViewById(R.id.cheat_button)
+        cheatingCounterTextView = findViewById(R.id.cheating_counter)
 
+        countCheating()
 
         trueButton.setOnClickListener {
             checkAnswer(true)
@@ -62,14 +68,26 @@ class MainActivity : AppCompatActivity() {
         nextButton.setOnClickListener {
             quizViewModel.moveToNext()
             updateQuestion()
+            quizViewModel.isCheater = false
         }
 
         cheatButton.setOnClickListener{
             val answerIsTrue = quizViewModel.currentQuestionAnswer
             val intent = CheatActivity.newIntent(this@MainActivity, answerIsTrue)
+            quizViewModel.countCheat()
+            countCheating()
+            if (cheatingCounter == 3){
+                cheatButton.isEnabled = false
+            }
             startActivityForResult(intent, REQUEST_CODE_CHEAT)
         }
         updateQuestion()
+    }
+
+    private fun countCheating() {
+        cheatingCounter = quizViewModel.cheatingCounter
+        val countOfCheatingRemain = "Осталось попыток ${maxCheating - cheatingCounter}"
+        cheatingCounterTextView.text = countOfCheatingRemain
     }
 
     private fun toastAnswer(string: Int) {

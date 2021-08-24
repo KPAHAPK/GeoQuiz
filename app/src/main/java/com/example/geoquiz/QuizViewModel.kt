@@ -24,6 +24,11 @@ class QuizViewModel : ViewModel() {
         }
     }
 
+    var cheatingCounter = 0
+    fun countCheat(){
+        cheatingCounter += 1
+    }
+
     val currentQuestionAnswer: Boolean
         get() = questionBank[currentIndex].answer
 
